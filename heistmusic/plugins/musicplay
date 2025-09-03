@@ -1,0 +1,27 @@
+# app/plugins/music.py
+import os
+from pyrogram import Client, filters, types
+from ..music_player import play_music, stop_music # Relative import
+
+@Client.on_message(filters.command("play"))
+async def play_command_plugin(client: Client, message: types.Message):
+    """Handles the /play command."""
+    query = " ".join(message.command[1:])
+    if not query:
+        await message.reply("Please provide a song name or YouTube URL.")
+        return
+
+    await play_music(client, message, query)
+
+@Client.on_message(filters.command("stop"))
+async def stop_command_plugin(client: Client, message: types.Message):
+    """Handles the /stop command."""
+    await stop_music(client, message)
+
+@Client.on_message(filters.command("skip"))
+async def skip_command_plugin(client: Client, message: types.Message):
+    """
+    Handles the /skip command.
+    (This would need to interact with a queueing system in your music_player module.)
+    """
+    await message.reply("Skipping song...")
