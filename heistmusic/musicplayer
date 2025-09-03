@@ -1,0 +1,21 @@
+# app/music_player.py
+from pyrogram.client import Client
+from pyrogram.types import Message
+from pytgcalls import PyTgCalls
+from .youtube import get_youtube_stream_info
+
+# Initialize PyTgCalls (session should be managed outside this function)
+# voice_player = PyTgCalls(client_instance, app_name="MusicPlayer")
+
+async def play_music(client: Client, message: Message, query: str):
+    url, title, _ = get_youtube_stream_info(query)
+    if url:
+        await client.send_message(message.chat.id, f"Now playing: {title}")
+        # Logic to stream the URL to the voice chat
+        # await voice_player.play(message.chat.id, url)
+    else:
+        await client.send_message(message.chat.id, "Could not find that song.")
+
+async def stop_music(client: Client, message: Message):
+    # await voice_player.stop(message.chat.id)
+    await client.send_message(message.chat.id, "Playback stopped.")
